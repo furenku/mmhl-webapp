@@ -1,0 +1,6 @@
+[submodule "full-player/recursos/style_utils"]
+	path = full-player/recursos/style_utils
+	url = https://github.com/kernspaltung/style_utils.git
+[submodule "full-player/recursos/js_utils"]
+	path = full-player/recursos/js_utils
+	url = https://github.com/kernspaltung/js_utils.git
