@@ -42,8 +42,10 @@ var paths = {
       config.bowerDir + '/jquery/dist/jquery.js',
       config.bowerDir + '/bootstrap-sass/assets/javascripts/bootstrap.min.js',
       config.bowerDir + '/imgLiquid/js/imgLiquid-min.js',
+      config.bowerDir + '/socket.io-client/socket.io.js',
       config.utils + '/js_utils/dist/js/js_utils.min.js',
-      'src/js/*.js'
+      'src/js/scroll.js',
+      'src/js/app.js'
    ],
    fonts: [
       config.bowerDir + '/font-awesome/fonts/**.*'

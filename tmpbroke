@@ -1,0 +1,111 @@
+
+      /*
+      FB.api('1316099708408345/feed', function (res) {
+      if(!res || res.error) {
+      console.log(!res ? 'error occurred' : res.error);
+      return;
+   }
+
+   var posts = res.data;
+
+   for( i in posts ) {
+   console.log("///////////////////////////////////////////");
+   console.log("post", posts[i].message );
+}
+
+});
+
+FB.api('1316099708408345/comments', function (res) {
+if(!res || res.error) {
+console.log(!res ? 'error occurred' : res.error);
+return;
+}
+
+var posts = res.data;
+console.log("commnets///////////////////////////////////////////");
+
+for( i in posts ) {
+console.log("post", posts[i].message );
+}
+
+});
+
+
+FB.api('1316099708408345/attending', function (res) {
+if(!res || res.error) {
+console.log(!res ? 'error occurred' : res.error);
+return;
+}
+console.log("///////////////////////////////////////////");
+console.log(res);
+var users = res.data;
+
+for( i in users ) {
+
+console.log("user:", users[i].name );
+
+FB.api(users[i].id+"/friends", function (res) {
+if(!res || res.error) {
+console.log(!res ? 'error occurred' : res.error);
+return;
+}
+// console.log(res);
+console.log("numfriends:");
+console.log(res.summary.total_count);
+
+});
+
+// FB.api(users[i].id+"/picture", function (res) {
+//    if(!res || res.error) {
+//       console.log(!res ? 'error occurred' : res.error);
+//       return;
+//    }
+//    console.log("///////////////////////////////////////////");
+//
+//
+//    console.log("pic");
+//    console.log(res);
+//
+// });
+
+
+FB.api(users[i].id+"/picture?type=square", {redirect: false}, function (res) {
+if(!res || res.error) {
+console.log(!res ? 'error occurred' : res.error);
+return;
+}
+console.log("///////////////////////////////////////////");
+
+
+console.log("picture");
+console.log(res.data.url);
+imgs += '<img src="'+res.data.url+'">';
+});
+}
+});
+
+});
+
+// var authUrl = fb.getOauthUrl({
+//    "client_id":     1614514965519026
+//  , "redirect_uri":  'http://localhost:3000'
+// });
+//
+// // shows dialog
+// //res.redirect(authUrl);
+//
+// // after user click, auth `code` will be set
+// // we'll send that and get the access token
+// fb.authorize({
+//    "client_id":      1614514965519026
+//  , "redirect_uri":   'http://localhost:3000'
+//  , "client_secret":  'ead8e9a0aab4582ac35c2a4ec7a47e38'
+// //  , "code":           req.query.code
+// }, function (err, facebookRes) {
+//    fb.get("1316099708408345", function(err, res) {
+//      console.log(res);  // { id: '4', name: 'Mark Zuckerberg'... }
+//    });
+// })
+
+res.send( imgs );
+*/
