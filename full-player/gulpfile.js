@@ -43,6 +43,7 @@ var paths = {
       config.bowerDir + '/bootstrap-sass/assets/javascripts/bootstrap.min.js',
       config.bowerDir + '/imgLiquid/js/imgLiquid-min.js',
       config.bowerDir + '/socket.io-client/socket.io.js',
+      // 'https://cdn.socket.io/socket.io-1.3.5.js',
       config.utils + '/js_utils/dist/js/js_utils.min.js',
       'src/js/scroll.js',
       'src/js/app.js'

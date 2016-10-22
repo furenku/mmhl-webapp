@@ -2,12 +2,60 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var promise = require('promise');
+var osc = require("osc");
 
-var io = require('socket.io')(http);
 
+var clients = [];
+
+// var io = require('socket.io')(http, {origins:'*'})
+var io = require('socket.io')(http, {origins:'*:* *'})
+io.set('transports', [ 'websocket', 'flashsocket', 'polling', 'xhr-polling'  ] );
+
+// io.set('origins', '*:*');
 var FB = require('fb');
+// Add headers
+app.use(function (req, res, next) {
+   //
+   //    res.statusCode = 200;
+   // //...
+   // res.setHeader("Access-Control-Allow-Origin", "*");
+   // res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+   //  // Website you wish to allow to connect
+   res.setHeader('Access-Control-Allow-Origin', '*');
+   //
+   //  // Request methods you wish to allow
+   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+   //
+   //  // Request headers you wish to allow
+   //  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, *');
+   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+   //
+   //  // Set to true if you need the website to include cookies in the requests sent
+   //  // to the API (e.g. in case you use sessions)
+   res.setHeader('Access-Control-Allow-Credentials', true);
+
+   // Pass to next layer of middleware
+   next();
+});
+
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 app.use(express.static('full-player/public'));
+
+
+
+
+http.listen(80, "0.0.0.0", function(){
+   console.log('listening on *:80');
+});
+
+
+
 
 app.get('/test', function(req, res){
 
@@ -62,11 +110,6 @@ app.get('/', function(req, res){
 });
 
 
-http.listen(3000, function(){
-   console.log('listening on *:3000');
-});
-
-
 
 
 
@@ -75,11 +118,80 @@ http.listen(3000, function(){
 
 io.on('connection', function (socket) {
 
-  socket.emit('welcome', { hello: 'world' });
+   clients.push( socket.id );
+   console.log("clients:",clients.length);
+
+   var msg = {
+      address: "/create",
+      args: socket.id
+   };
+
+   udpPort.send(msg);
+
+   socket.on('scroll', function (data) {
+
+      var msg = {
+         address: "/scroll",
+         args: [socket.id, data.scrollTop]
+      };
+
+      udpPort.send(msg);
 
 
-  socket.on('scroll', function (data) {
-    console.log("client " + 1, "scrolltop: ", data);
-  });
+   });
+
+   socket.on('synthSelected', function (data) {
+      console.log("/synthSelected",data.index);
+      var msg = {
+         address: "/synthSelected",
+         args: [socket.id, data.index ]
+      };
+
+      udpPort.send(msg);
+
+
+   });
+
+   socket.on('disconnect', function() {
+
+      var msg = {
+         address: "/kill",
+         args: socket.id
+      };
+
+
+      udpPort.send(msg);
+      var index = clients.indexOf( socket.id );
+      clients.splice( index, 1 );
+      console.log("clients:",clients.length);
+
+   });
+
 
 });
+
+
+
+
+
+
+
+
+
+
+
+/* OSC */
+
+
+var udpPort = new osc.UDPPort({
+   // This is the port we're listening on.
+   localAddress: "127.0.0.1",
+   localPort: 57121,
+
+   // This is where sclang is listening for OSC messages.
+   remoteAddress: "127.0.0.1",
+   remotePort: 57120
+});
+
+// Open the socket.
+udpPort.open();

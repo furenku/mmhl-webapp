@@ -21,7 +21,7 @@ function ScrollInstrument() {
 
                scroller.scrolling = false;
 
-            },200);
+            }, 20);
          }
       })
 

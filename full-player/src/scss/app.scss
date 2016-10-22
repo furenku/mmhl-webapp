@@ -1,3 +1,9 @@
 @import 'bootstrap';
 @import 'style_utils';
 @import 'js_utils.scss';
+
+
+.selected {
+   @extend .color-secundario-bg;
+   @extend .color-white;
+}
